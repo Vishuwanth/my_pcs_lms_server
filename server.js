@@ -6,10 +6,47 @@ import autoIncrement from 'mongoose-auto-increment'
 // autoIncrement = require("mongoose-auto-increment")
 import bodyParser from 'body-parser'
 import jwt from 'jsonwebtoken'
+import nodemailer from 'nodemailer'
 // import Joi from "Joi"
 import cookieParser from 'cookie-parser'
 
+//create a .env config file
 dotenv.config()
+//creating tranpsorter for nodemailer
+// let transporter = nodemailer.createTransport({
+// 	service: 'gmail',
+// 	auth: {
+// 		type: 'OAuth2',
+// 		user: process.env.EMAIL,
+// 		pass: process.env.WORD,
+// 		clientId: process.env.OAUTH_CLIENTID,
+// 		clientSecret: process.env.OAUTH_CLIENT_SECRET,
+// 		refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+// 	},
+// })
+
+// transporter.verify((err, success) => {
+// 	err
+// 		? console.log(err)
+// 		: console.log(`=== Server is ready to take messages: ${success} ===`)
+// })
+
+// let mailOptions = {
+// 	from: 'test@gmail.com',
+// 	to: process.env.EMAIL,
+// 	subject: 'Nodemailer API',
+// 	text: 'Hi from your nodemailer API',
+// }
+
+// transporter.sendMail(mailOptions, function (err, data) {
+// 	if (err) {
+// 		console.log(process.ENV)
+// 		console.log('Error ' + err)
+// 	} else {
+// 		console.log('Email sent successfully')
+// 	}
+// })
+
 const app = express()
 
 app.use(express.json())
@@ -18,6 +55,7 @@ app.use(
 		extended: true,
 	})
 )
+
 // app.use(express.urlencoded())
 app.use(cors())
 
@@ -269,6 +307,8 @@ app.post('/leave-application-emp/:id', (req, res) => {
 					}
 				}
 			)
+			//send mail after aplying for leave to hr from the respective employe mail
+
 			// console.log(req.body);
 		}
 	})
@@ -277,15 +317,10 @@ app.post('/leave-application-emp/:id', (req, res) => {
 //Updating LeaveBalance in employee Record
 
 app.put('/leave-application-emp/:id/leave-balance/', (req, res) => {
-	console.log('leave-idsnadknaslkdla:', req.body.leaveBalance)
-
-	let LeaveBalance = req.body.leaveBalance - req.body.days
-	console.log(LeaveBalance)
 	employees.findByIdAndUpdate(
 		req.params.id,
-		{ $set: { leaveBalance: LeaveBalance } },
+		{ $set: { leaveBalance: req.body.leaveBalance } },
 		function (err, response) {
-			console.log('response', response)
 			res.send(response)
 		}
 	)
