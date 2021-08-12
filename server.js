@@ -166,19 +166,14 @@ app.get('/hr/all-emp-details', (req, res) => {
 	//   "Account":3
 	// },
 	console.log('called')
-	employees.find(
-		{
-			Account: 3,
-		},
-		function (error, allEmp) {
-			if (error) {
-				res.send(error)
-			} else {
-				console.log(allEmp)
-				res.send(allEmp)
-			}
+	employees.find(function (error, allEmp) {
+		if (error) {
+			res.send(error)
+		} else {
+			console.log(allEmp)
+			res.send(allEmp)
 		}
-	)
+	})
 })
 
 //adding employees (removed verifyHR ,JOI,  EmployeeValidation functions)
@@ -186,6 +181,7 @@ app.post('/employee', (req, res) => {
 	// console.log("here the data")
 	// console.log(req.body.FirstName)
 	let newEmployee
+
 	newEmployee = {
 		FirstName: req.body.FirstName,
 		MiddleName: req.body.MiddleName,
